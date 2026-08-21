@@ -20,4 +20,7 @@ public class BatchService {
 		return batchRepository.findAll();
 	}
 	
+	public Batch insert(Batch batch) { 
+		return batchRepository.save(batch);
+	}
 }

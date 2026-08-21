@@ -19,4 +19,9 @@ public class FarmService {
 	public List<Farm> findAll() { 
 		return farmRepository.findAll();
 	}
+	
+	public Farm insert(Farm farm) { 
+		return farmRepository.save(farm);
+	}
+	
 }
