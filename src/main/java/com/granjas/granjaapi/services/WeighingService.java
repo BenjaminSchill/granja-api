@@ -19,4 +19,8 @@ public class WeighingService {
 	public List<Weighing> findAll() { 
 		return weighingRepository.findAll();
 	}
+	
+	public Weighing insert(Weighing weighing) { 
+		return weighingRepository.save(weighing);
+	}
 }
