@@ -11,5 +11,5 @@ public interface DailyLogRepository extends JpaRepository<DailyLog, Long> {
 	
 	@Query("SELECT obj FROM DailyLog obj JOIN FETCH obj.weighings")
 	List<DailyLog> findAllWithWeighings();
-
+	
 }

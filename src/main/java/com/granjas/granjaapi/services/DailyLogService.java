@@ -19,4 +19,8 @@ public class DailyLogService {
 	public List<DailyLog> findAll() { 
 		return dailyLogRepository.findAllWithWeighings();
 	}
+	
+	public DailyLog insert(DailyLog dailyLog) { 
+		return dailyLogRepository.save(dailyLog);
+	}
 }
