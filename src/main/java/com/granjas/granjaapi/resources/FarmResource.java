@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,6 +29,12 @@ public class FarmResource {
 	public ResponseEntity<List<Farm>> findAll() { 
 		List<Farm> list = farmService.findAll();
 		return ResponseEntity.ok().body(list);
+	}
+	
+	@GetMapping(value = "/{id}")
+	public ResponseEntity<Farm> findById(@PathVariable Long id) { 
+		Farm farm = farmService.findById(id);
+		return ResponseEntity.ok().body(farm);
 	}
 	
 	@PostMapping

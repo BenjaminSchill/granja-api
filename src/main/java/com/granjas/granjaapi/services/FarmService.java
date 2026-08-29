@@ -1,6 +1,7 @@
 package com.granjas.granjaapi.services;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -18,6 +19,11 @@ public class FarmService {
 	
 	public List<Farm> findAll() { 
 		return farmRepository.findAll();
+	}
+	
+	public Farm findById(Long id) { 
+		Optional<Farm> obj = farmRepository.findById(id);
+		return obj.get();
 	}
 	
 	public Farm insert(Farm farm) { 

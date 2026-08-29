@@ -1,6 +1,7 @@
 package com.granjas.granjaapi.services;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -18,6 +19,11 @@ public class BatchService {
 	
 	public List<Batch> findAll() { 
 		return batchRepository.findAll();
+	}
+	
+	public Batch findById(Long id) { 
+		Optional<Batch> obj = batchRepository.findById(id);
+		return obj.get();
 	}
 	
 	public Batch insert(Batch batch) { 

@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,6 +29,12 @@ public class BatchResource {
 	public ResponseEntity<List<Batch>> findAll() { 
 		List<Batch> list = batchService.findAll();
 		return ResponseEntity.ok().body(list);
+	}
+	
+	@GetMapping(value = "/{id}")
+	public ResponseEntity<Batch> findById(@PathVariable Long id) { 
+		Batch batch = batchService.findById(id);
+		return ResponseEntity.ok().body(batch);
 	}
 	
 	@PostMapping

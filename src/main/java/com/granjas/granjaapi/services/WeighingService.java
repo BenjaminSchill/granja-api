@@ -1,6 +1,7 @@
 package com.granjas.granjaapi.services;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -18,6 +19,11 @@ public class WeighingService {
 	
 	public List<Weighing> findAll() { 
 		return weighingRepository.findAll();
+	}
+	
+	public Weighing findById(Long id) { 
+		Optional<Weighing> obj = weighingRepository.findById(id);
+		return obj.get();
 	}
 	
 	public Weighing insert(Weighing weighing) { 
