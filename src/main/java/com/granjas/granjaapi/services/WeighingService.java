@@ -33,7 +33,7 @@ public class WeighingService {
 	@Transactional
 	public Weighing insert(Weighing weighing) { 
 		weighing = weighingRepository.save(weighing);
-		updateDailyLogCalculations(weighing.getDailyLog().getId());
+		updateDailyLogCalculations(weighing.getDailyLog().getId(), null);
 		return weighing;
 	}
 	
@@ -46,10 +46,10 @@ public class WeighingService {
 		
 		weighingRepository.delete(weighing);
 		
-		updateDailyLogCalculations(dailyLogId);
+		updateDailyLogCalculations(dailyLogId, id);
 	}
 	
-	private void updateDailyLogCalculations(Long dailyLogId) { 
+	private void updateDailyLogCalculations(Long dailyLogId, Long excludedWeighingId) { 
 		DailyLog dailyLog = dailyLogRepository.findById(dailyLogId)
 				.orElseThrow(() -> new RuntimeException("DailyLog not found"));
 		
@@ -57,8 +57,10 @@ public class WeighingService {
 		int totalChickens = 0; 
 		
 		for (Weighing w : dailyLog.getWeighings()) {
-			totalWeight += w.getWeightInBox();
-			totalChickens += w.getTotalInBox();
+			if (excludedWeighingId == null || !w.getId().equals(excludedWeighingId)) {
+				totalWeight += w.getWeightInBox();
+				totalChickens += w.getTotalInBox();
+			}
 		}
 		
 		if (totalChickens > 0) {
@@ -72,4 +74,5 @@ public class WeighingService {
 		}
 		dailyLogRepository.save(dailyLog);
 	}
+
 }
