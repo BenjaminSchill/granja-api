@@ -44,4 +44,10 @@ public class DailyLogService {
 		dailyLog.getBatch().setTotalOfDeaths(totalOfDeaths);
 		batchRepository.save(dailyLog.getBatch());
 	}
+	
+	public void delete(Long id) { 
+		DailyLog dailyLog = dailyLogRepository.findById(id).get(); 
+		dailyLogRepository.delete(dailyLog);
+		updateBatchTotalOfDeaths(dailyLog);
+	}
 }
