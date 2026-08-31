@@ -29,4 +29,8 @@ public class BatchService {
 	public Batch insert(Batch batch) { 
 		return batchRepository.save(batch);
 	}
+	
+	public void delete(Long id) { 
+		batchRepository.deleteById(id);
+	}
 }
