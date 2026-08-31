@@ -30,4 +30,7 @@ public class FarmService {
 		return farmRepository.save(farm);
 	}
 	
+	public void delete(Long id) { 
+		farmRepository.deleteById(id);
+	}
 }
