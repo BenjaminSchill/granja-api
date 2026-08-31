@@ -31,6 +31,12 @@ public class WeighingService {
 	}
 	
 	public Weighing insert(Weighing weighing) { 
+		weighing = weighingRepository.save(weighing);
+		updateDailyLogCalculations(weighing);
+		return weighing;
+	}
+	
+	public void updateDailyLogCalculations(Weighing weighing) { 
 		DailyLog dailyLog = dailyLogRepository.findByIdWithWeighings(weighing.getDailyLog().getId()).get();
 		double totalWeight = 0.0;
 		int totalChickens = 0; 
@@ -39,15 +45,10 @@ public class WeighingService {
 			totalWeight += w.getWeightInBox();
 			totalChickens += w.getTotalInBox();
 		}
-		totalWeight += weighing.getWeightInBox();
-		totalChickens += weighing.getTotalInBox();
-		
 		double averageWeight = totalWeight / (double) totalChickens;
 		dailyLog.setAverageWeight(averageWeight);
 		dailyLog.setTotalWeight(totalWeight);
 		
 		dailyLogRepository.save(dailyLog);
-		
-		return weighingRepository.save(weighing);
 	}
 }
