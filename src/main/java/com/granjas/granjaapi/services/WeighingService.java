@@ -1,9 +1,9 @@
 package com.granjas.granjaapi.services;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.granjas.granjaapi.entities.DailyLog;
 import com.granjas.granjaapi.entities.Weighing;
@@ -26,18 +26,33 @@ public class WeighingService {
 	}
 	
 	public Weighing findById(Long id) { 
-		Optional<Weighing> obj = weighingRepository.findById(id);
-		return obj.get();
+		return weighingRepository.findById(id)
+				.orElseThrow(() -> new RuntimeException("Weighing not found"));
 	}
 	
+	@Transactional
 	public Weighing insert(Weighing weighing) { 
 		weighing = weighingRepository.save(weighing);
-		updateDailyLogCalculations(weighing);
+		updateDailyLogCalculations(weighing.getDailyLog().getId());
 		return weighing;
 	}
 	
-	public void updateDailyLogCalculations(Weighing weighing) { 
-		DailyLog dailyLog = dailyLogRepository.findByIdWithWeighings(weighing.getDailyLog().getId()).get();
+	@Transactional
+	public void delete(Long id) { 
+		Weighing weighing = weighingRepository.findById(id)
+				.orElseThrow(() -> new RuntimeException("Weighing not found"));
+		
+		Long dailyLogId = weighing.getDailyLog().getId();
+		
+		weighingRepository.delete(weighing);
+		
+		updateDailyLogCalculations(dailyLogId);
+	}
+	
+	private void updateDailyLogCalculations(Long dailyLogId) { 
+		DailyLog dailyLog = dailyLogRepository.findById(dailyLogId)
+				.orElseThrow(() -> new RuntimeException("DailyLog not found"));
+		
 		double totalWeight = 0.0;
 		int totalChickens = 0; 
 		
@@ -45,10 +60,16 @@ public class WeighingService {
 			totalWeight += w.getWeightInBox();
 			totalChickens += w.getTotalInBox();
 		}
-		double averageWeight = totalWeight / (double) totalChickens;
-		dailyLog.setAverageWeight(averageWeight);
-		dailyLog.setTotalWeight(totalWeight);
 		
+		if (totalChickens > 0) {
+		    double averageWeight = totalWeight / (double) totalChickens;
+		    dailyLog.setAverageWeight(averageWeight);
+		    dailyLog.setTotalWeight(totalWeight);
+		}
+		else {
+		    dailyLog.setAverageWeight(0.0);
+		    dailyLog.setTotalWeight(0.0);
+		}
 		dailyLogRepository.save(dailyLog);
 	}
 }

@@ -1,10 +1,11 @@
 package com.granjas.granjaapi.services;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.granjas.granjaapi.entities.Batch;
 import com.granjas.granjaapi.entities.DailyLog;
 import com.granjas.granjaapi.repositories.BatchRepository;
 import com.granjas.granjaapi.repositories.DailyLogRepository;
@@ -25,29 +26,38 @@ public class DailyLogService {
 	}
 	
 	public DailyLog findById(Long id) { 
-		Optional<DailyLog> obj = dailyLogRepository.findByIdWithWeighings(id);
-		return obj.get();
+		return dailyLogRepository.findById(id)
+				.orElseThrow(() -> new RuntimeException("DailyLog not found"));
 	}
 	
+	@Transactional
 	public DailyLog insert(DailyLog dailyLog) { 	
 		dailyLog = dailyLogRepository.save(dailyLog);
-		updateBatchTotalOfDeaths(dailyLog);
+		updateBatchTotalOfDeaths(dailyLog.getBatch());
 		return dailyLog;
 	}
 	
-	private void updateBatchTotalOfDeaths(DailyLog dailyLog) { 
+	@Transactional
+	public void delete(Long id) { 
+		DailyLog dailyLog = dailyLogRepository.findById(id)
+				.orElseThrow(() -> new RuntimeException("DailyLog not found"));
+		
+		Batch batch = dailyLog.getBatch();
+		
+		dailyLogRepository.delete(dailyLog);
+		
+		if (batch != null) {
+			updateBatchTotalOfDeaths(batch);
+		}
+	}
+	
+	private void updateBatchTotalOfDeaths(Batch batch) { 
 		int totalOfDeaths = 0;
-		for (DailyLog dl : dailyLogRepository.findByBatch(dailyLog.getBatch())) { 
+		for (DailyLog dl : dailyLogRepository.findByBatch(batch)) { 
 			totalOfDeaths += dl.getDailyMortality();
 		}
 		
-		dailyLog.getBatch().setTotalOfDeaths(totalOfDeaths);
-		batchRepository.save(dailyLog.getBatch());
-	}
-	
-	public void delete(Long id) { 
-		DailyLog dailyLog = dailyLogRepository.findById(id).get(); 
-		dailyLogRepository.delete(dailyLog);
-		updateBatchTotalOfDeaths(dailyLog);
+		batch.setTotalOfDeaths(totalOfDeaths);
+		batchRepository.save(batch);
 	}
 }
