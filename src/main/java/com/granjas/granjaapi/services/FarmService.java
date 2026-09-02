@@ -2,10 +2,12 @@ package com.granjas.granjaapi.services;
 
 import java.util.List;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import com.granjas.granjaapi.entities.Farm;
 import com.granjas.granjaapi.repositories.FarmRepository;
+import com.granjas.granjaapi.services.exceptions.DatabaseException;
 import com.granjas.granjaapi.services.exceptions.ResourceNotFoundException;
 
 @Service
@@ -31,6 +33,11 @@ public class FarmService {
 	}
 	
 	public void delete(Long id) { 
-		farmRepository.deleteById(id);
+		try { 
+			farmRepository.deleteById(id);
+		} 
+		catch (DataIntegrityViolationException e) { 
+			throw new DatabaseException(e.getMessage());
+		}
 	}
 }
