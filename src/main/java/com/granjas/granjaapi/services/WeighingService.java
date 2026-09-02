@@ -9,6 +9,7 @@ import com.granjas.granjaapi.entities.DailyLog;
 import com.granjas.granjaapi.entities.Weighing;
 import com.granjas.granjaapi.repositories.DailyLogRepository;
 import com.granjas.granjaapi.repositories.WeighingRepository;
+import com.granjas.granjaapi.services.exceptions.ResourceNotFoundException;
 
 @Service
 public class WeighingService {
@@ -27,7 +28,7 @@ public class WeighingService {
 	
 	public Weighing findById(Long id) { 
 		return weighingRepository.findById(id)
-				.orElseThrow(() -> new RuntimeException("Weighing not found"));
+				.orElseThrow(() -> new ResourceNotFoundException("Resource not found. Id " + id));
 	}
 	
 	@Transactional
@@ -40,7 +41,7 @@ public class WeighingService {
 	@Transactional
 	public void delete(Long id) { 
 		Weighing weighing = weighingRepository.findById(id)
-				.orElseThrow(() -> new RuntimeException("Weighing not found"));
+				.orElseThrow(() -> new ResourceNotFoundException("Resource not found. Id " + id));
 		
 		Long dailyLogId = weighing.getDailyLog().getId();
 		
@@ -74,5 +75,4 @@ public class WeighingService {
 		}
 		dailyLogRepository.save(dailyLog);
 	}
-
 }

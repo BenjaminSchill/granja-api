@@ -1,12 +1,12 @@
 package com.granjas.granjaapi.services;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
 import com.granjas.granjaapi.entities.Batch;
 import com.granjas.granjaapi.repositories.BatchRepository;
+import com.granjas.granjaapi.services.exceptions.ResourceNotFoundException;
 
 @Service
 public class BatchService {
@@ -22,8 +22,8 @@ public class BatchService {
 	}
 	
 	public Batch findById(Long id) { 
-		Optional<Batch> obj = batchRepository.findById(id);
-		return obj.get();
+		return batchRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Resource not found. Id " + id));
 	}
 	
 	public Batch insert(Batch batch) { 

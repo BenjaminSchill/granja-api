@@ -9,6 +9,7 @@ import com.granjas.granjaapi.entities.Batch;
 import com.granjas.granjaapi.entities.DailyLog;
 import com.granjas.granjaapi.repositories.BatchRepository;
 import com.granjas.granjaapi.repositories.DailyLogRepository;
+import com.granjas.granjaapi.services.exceptions.ResourceNotFoundException;
 
 @Service
 public class DailyLogService {
@@ -27,7 +28,7 @@ public class DailyLogService {
 	
 	public DailyLog findById(Long id) { 
 		return dailyLogRepository.findById(id)
-				.orElseThrow(() -> new RuntimeException("DailyLog not found"));
+				.orElseThrow(() -> new ResourceNotFoundException("Resource not found. Id " + id));
 	}
 	
 	@Transactional
@@ -40,7 +41,7 @@ public class DailyLogService {
 	@Transactional
 	public void delete(Long id) { 
 		DailyLog dailyLog = dailyLogRepository.findById(id)
-				.orElseThrow(() -> new RuntimeException("DailyLog not found"));
+				.orElseThrow(() -> new ResourceNotFoundException("Resource not found. Id " + id));
 		
 		Batch batch = dailyLog.getBatch();
 		

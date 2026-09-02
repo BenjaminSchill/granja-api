@@ -1,12 +1,12 @@
 package com.granjas.granjaapi.services;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
 import com.granjas.granjaapi.entities.Farm;
 import com.granjas.granjaapi.repositories.FarmRepository;
+import com.granjas.granjaapi.services.exceptions.ResourceNotFoundException;
 
 @Service
 public class FarmService {
@@ -22,8 +22,8 @@ public class FarmService {
 	}
 	
 	public Farm findById(Long id) { 
-		Optional<Farm> obj = farmRepository.findById(id);
-		return obj.get();
+		return farmRepository.findById(id)
+		.orElseThrow(() -> new ResourceNotFoundException("Resource not found. Id " + id));
 	}
 	
 	public Farm insert(Farm farm) { 
