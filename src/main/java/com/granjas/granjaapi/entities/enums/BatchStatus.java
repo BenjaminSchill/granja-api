@@ -4,7 +4,6 @@ public enum BatchStatus {
 	ACTIVE(1),
 	CLOSED(2);
     
-	
 	private int code;
 	private BatchStatus(int code) { 
 		this.code = code;
@@ -22,5 +21,4 @@ public enum BatchStatus {
 		}
 		throw new IllegalArgumentException("Invalid BatchStatus code");
 	}
-	
 }

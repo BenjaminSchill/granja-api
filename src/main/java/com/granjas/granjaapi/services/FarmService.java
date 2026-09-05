@@ -10,6 +10,8 @@ import com.granjas.granjaapi.repositories.FarmRepository;
 import com.granjas.granjaapi.services.exceptions.DatabaseException;
 import com.granjas.granjaapi.services.exceptions.ResourceNotFoundException;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class FarmService {
 	
@@ -30,6 +32,14 @@ public class FarmService {
 	
 	public Farm insert(Farm farm) { 
 		return farmRepository.save(farm);
+	}
+	
+	@Transactional
+	public Farm update(Long id, Farm farm) { 
+		Farm entity = farmRepository.getReferenceById(id);
+		entity.setName(farm.getName());
+		entity.setCapacity(farm.getCapacity());
+		return farmRepository.save(entity);
 	}
 	
 	public void delete(Long id) { 

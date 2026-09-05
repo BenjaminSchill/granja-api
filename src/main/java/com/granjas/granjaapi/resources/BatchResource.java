@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -44,6 +45,12 @@ public class BatchResource {
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
 				.buildAndExpand(batch.getId()).toUri();
 		return ResponseEntity.created(uri).body(batch);
+	}
+	
+	@PutMapping(value = "/{id}")
+	public ResponseEntity<Batch> update(@PathVariable Long id, @RequestBody Batch batch) { 
+		batch = batchService.update(id, batch);
+		return ResponseEntity.ok().body(batch);
 	}
 	
 	@DeleteMapping(value = "/{id}")

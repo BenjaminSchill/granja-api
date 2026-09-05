@@ -34,7 +34,6 @@ public class Weighing implements Serializable {
 	}
 
 	public Weighing(Long id, Integer weighingPoint, Integer totalInBox, Double weightInBox, DailyLog dailyLog) {
-		super();
 		this.id = id;
 		this.weighingPoint = weighingPoint;
 		this.totalInBox = totalInBox;

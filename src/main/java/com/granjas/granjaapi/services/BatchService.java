@@ -8,6 +8,8 @@ import com.granjas.granjaapi.entities.Batch;
 import com.granjas.granjaapi.repositories.BatchRepository;
 import com.granjas.granjaapi.services.exceptions.ResourceNotFoundException;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class BatchService {
 	
@@ -28,6 +30,14 @@ public class BatchService {
 	
 	public Batch insert(Batch batch) { 
 		return batchRepository.save(batch);
+	}
+	
+	@Transactional
+	public Batch update(Long id, Batch batch) { 
+		Batch entity = batchRepository.getReferenceById(id);
+		entity.setStatus(batch.getStatus());
+		entity.setTotalUponArrival(batch.getTotalUponArrival());
+		return batchRepository.save(entity);
 	}
 	
 	public void delete(Long id) { 

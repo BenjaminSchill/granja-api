@@ -46,7 +46,6 @@ public class DailyLog implements Serializable {
 
 	public DailyLog(Long id, Integer age, Integer dailyMortality, Double totalWeight, Double averageWeight,
 			Double feedConsumption, Double waterConsumption, Instant date, Batch batch) {
-		super();
 		this.id = id;
 		this.age = age;
 		this.dailyMortality = dailyMortality;

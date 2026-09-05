@@ -39,6 +39,17 @@ public class WeighingService {
 	}
 	
 	@Transactional
+	public Weighing update(Long id, Weighing weighing) { 
+		Weighing entity = weighingRepository.getReferenceById(id);
+		entity.setWeighingPoint(weighing.getWeighingPoint());
+		entity.setTotalInBox(weighing.getTotalInBox());
+		entity.setWeightInBox(weighing.getWeightInBox());
+		weighingRepository.save(entity);
+		updateDailyLogCalculations(entity.getDailyLog().getId(), null);
+		return entity;
+	}
+	
+	@Transactional
 	public void delete(Long id) { 
 		Weighing weighing = weighingRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Resource not found. Id " + id));
@@ -49,7 +60,7 @@ public class WeighingService {
 		
 		updateDailyLogCalculations(dailyLogId, id);
 	}
-	
+		
 	private void updateDailyLogCalculations(Long dailyLogId, Long excludedWeighingId) { 
 		DailyLog dailyLog = dailyLogRepository.findById(dailyLogId)
 				.orElseThrow(() -> new RuntimeException("DailyLog not found"));

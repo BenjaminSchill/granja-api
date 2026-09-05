@@ -39,6 +39,18 @@ public class DailyLogService {
 	}
 	
 	@Transactional
+	public DailyLog update(Long id, DailyLog dailyLog) { 
+		DailyLog entity = dailyLogRepository.getReferenceById(id);
+		entity.setAge(dailyLog.getAge());
+		entity.setFeedConsumption(dailyLog.getFeedConsumption());
+		entity.setWaterConsumption(dailyLog.getWaterConsumption());
+		entity.setDailyMortality(dailyLog.getDailyMortality());
+		entity = dailyLogRepository.save(entity);
+		updateBatchTotalOfDeaths(entity.getBatch());
+		return entity;
+		}
+	
+	@Transactional
 	public void delete(Long id) { 
 		DailyLog dailyLog = dailyLogRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Resource not found. Id " + id));
@@ -57,7 +69,6 @@ public class DailyLogService {
 		for (DailyLog dl : dailyLogRepository.findByBatch(batch)) { 
 			totalOfDeaths += dl.getDailyMortality();
 		}
-		
 		batch.setTotalOfDeaths(totalOfDeaths);
 		batchRepository.save(batch);
 	}
