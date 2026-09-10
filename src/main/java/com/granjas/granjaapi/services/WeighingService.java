@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.granjas.granjaapi.dto.WeighingDTO;
 import com.granjas.granjaapi.entities.DailyLog;
 import com.granjas.granjaapi.entities.Weighing;
 import com.granjas.granjaapi.repositories.DailyLogRepository;
@@ -22,31 +23,33 @@ public class WeighingService {
 		this.dailyLogRepository = dailyLogRepository;
 	}
 	
-	public List<Weighing> findAll() { 
-		return weighingRepository.findAll();
+	public List<WeighingDTO> findAll() { 
+		List<Weighing> list = weighingRepository.findAll();
+		return list.stream().map(x -> new WeighingDTO(x)).toList();
 	}
 	
-	public Weighing findById(Long id) { 
-		return weighingRepository.findById(id)
+	public WeighingDTO findById(Long id) { 
+		Weighing entity = weighingRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Resource not found. Id " + id));
+		return new WeighingDTO(entity);
 	}
 	
 	@Transactional
-	public Weighing insert(Weighing weighing) { 
+	public WeighingDTO insert(Weighing weighing) { 
 		weighing = weighingRepository.save(weighing);
 		updateDailyLogCalculations(weighing.getDailyLog().getId(), null);
-		return weighing;
+		return new WeighingDTO(weighing);
 	}
 	
 	@Transactional
-	public Weighing update(Long id, Weighing weighing) { 
+	public WeighingDTO update(Long id, Weighing weighing) { 
 		Weighing entity = weighingRepository.getReferenceById(id);
 		entity.setWeighingPoint(weighing.getWeighingPoint());
 		entity.setTotalInBox(weighing.getTotalInBox());
 		entity.setWeightInBox(weighing.getWeightInBox());
 		weighingRepository.save(entity);
 		updateDailyLogCalculations(entity.getDailyLog().getId(), null);
-		return entity;
+		return new WeighingDTO(entity);
 	}
 	
 	@Transactional

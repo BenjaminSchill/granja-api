@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.granjas.granjaapi.dto.FarmDTO;
 import com.granjas.granjaapi.entities.Farm;
 import com.granjas.granjaapi.services.FarmService;
 
@@ -28,28 +29,28 @@ public class FarmResource {
 	}
 	
 	@GetMapping
-	public ResponseEntity<List<Farm>> findAll() { 
-		List<Farm> list = farmService.findAll();
+	public ResponseEntity<List<FarmDTO>> findAll() { 
+		List<FarmDTO> list = farmService.findAll();
 		return ResponseEntity.ok().body(list);
 	}
 	
 	@GetMapping(value = "/{id}")
-	public ResponseEntity<Farm> findById(@PathVariable Long id) { 
-		Farm farm = farmService.findById(id);
+	public ResponseEntity<FarmDTO> findById(@PathVariable Long id) { 
+		FarmDTO farm = farmService.findById(id);
 		return ResponseEntity.ok().body(farm);
 	}
 	
 	@PostMapping
-	public ResponseEntity<Farm> insert(@RequestBody Farm farm) { 
-		farm = farmService.insert(farm);
+	public ResponseEntity<FarmDTO> insert(@RequestBody Farm farm) { 
+		FarmDTO farmDTO = farmService.insert(farm);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
-	            .buildAndExpand(farm.getId()).toUri();
-		return ResponseEntity.created(uri).body(farm);
+	            .buildAndExpand(farmDTO.getId()).toUri();
+		return ResponseEntity.created(uri).body(farmDTO);
 	}
 	
 	@PutMapping(value = "/{id}")
-	public ResponseEntity<Farm> update(@PathVariable Long id, @RequestBody Farm farm) { 
-		Farm entity = farmService.update(id, farm);
+	public ResponseEntity<FarmDTO> update(@PathVariable Long id, @RequestBody Farm farm) { 
+		FarmDTO entity = farmService.update(id, farm);
 		return ResponseEntity.ok().body(entity);
 	}
 	

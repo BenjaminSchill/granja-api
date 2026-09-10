@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
+import com.granjas.granjaapi.dto.FarmDTO;
 import com.granjas.granjaapi.entities.Farm;
 import com.granjas.granjaapi.repositories.FarmRepository;
 import com.granjas.granjaapi.services.exceptions.DatabaseException;
@@ -21,25 +22,29 @@ public class FarmService {
 		this.farmRepository = farmRepository;
 	}
 	
-	public List<Farm> findAll() { 
-		return farmRepository.findAll();
+	public List<FarmDTO> findAll() { 
+		List<Farm> list = farmRepository.findAll();
+		return list.stream().map(x -> new FarmDTO(x)).toList();
 	}
 	
-	public Farm findById(Long id) { 
-		return farmRepository.findById(id)
+	public FarmDTO findById(Long id) {
+		Farm entity = farmRepository.findById(id)
 		.orElseThrow(() -> new ResourceNotFoundException("Resource not found. Id " + id));
+		return new FarmDTO(entity);
 	}
 	
-	public Farm insert(Farm farm) { 
-		return farmRepository.save(farm);
+	public FarmDTO insert(Farm farm) { 
+		farm = farmRepository.save(farm);
+		return new FarmDTO(farm);
 	}
 	
 	@Transactional
-	public Farm update(Long id, Farm farm) { 
+	public FarmDTO update(Long id, Farm farm) { 
 		Farm entity = farmRepository.getReferenceById(id);
 		entity.setName(farm.getName());
 		entity.setCapacity(farm.getCapacity());
-		return farmRepository.save(entity);
+		entity = farmRepository.save(entity);
+		return new FarmDTO(entity);
 	}
 	
 	public void delete(Long id) { 

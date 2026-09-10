@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.granjas.granjaapi.dto.DailyLogDTO;
 import com.granjas.granjaapi.entities.DailyLog;
 import com.granjas.granjaapi.services.DailyLogService;
 
@@ -28,28 +29,28 @@ public class DailyLogResource {
 	}
 	
 	@GetMapping
-	public ResponseEntity<List<DailyLog>> findAll() { 
-		List<DailyLog> list = dailyLogService.findAll();
+	public ResponseEntity<List<DailyLogDTO>> findAll() { 
+		List<DailyLogDTO> list = dailyLogService.findAll();
 		return ResponseEntity.ok().body(list);
 	}
 	
 	@GetMapping(value = "/{id}")
-	public ResponseEntity<DailyLog> findById(@PathVariable Long id) { 
-		DailyLog dailyLog = dailyLogService.findById(id);
+	public ResponseEntity<DailyLogDTO> findById(@PathVariable Long id) { 
+		DailyLogDTO dailyLog = dailyLogService.findById(id);
 		return ResponseEntity.ok().body(dailyLog);
 	}
 	
 	@PostMapping
-	public ResponseEntity<DailyLog> insert(@RequestBody DailyLog dailyLog) { 
-		dailyLog = dailyLogService.insert(dailyLog);
+	public ResponseEntity<DailyLogDTO> insert(@RequestBody DailyLog dailyLog) { 
+		DailyLogDTO dailyLogDTO = dailyLogService.insert(dailyLog);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
-	            .buildAndExpand(dailyLog.getId()).toUri();
-		return ResponseEntity.created(uri).body(dailyLog);
+	            .buildAndExpand(dailyLogDTO.getId()).toUri();
+		return ResponseEntity.created(uri).body(dailyLogDTO);
 	}
 	
 	@PutMapping(value = "/{id}")
-	public ResponseEntity<DailyLog> update(@PathVariable Long id, @RequestBody DailyLog dailyLog) { 
-		DailyLog entity = dailyLogService.update(id, dailyLog);
+	public ResponseEntity<DailyLogDTO> update(@PathVariable Long id, @RequestBody DailyLog dailyLog) { 
+		DailyLogDTO entity = dailyLogService.update(id, dailyLog);
 		return ResponseEntity.ok().body(entity);
 	}
 	

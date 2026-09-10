@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.granjas.granjaapi.dto.DailyLogDTO;
 import com.granjas.granjaapi.entities.Batch;
 import com.granjas.granjaapi.entities.DailyLog;
 import com.granjas.granjaapi.repositories.BatchRepository;
@@ -22,24 +23,26 @@ public class DailyLogService {
 		this.batchRepository = batchRepository;
 	}
 	
-	public List<DailyLog> findAll() { 
-		return dailyLogRepository.findAllWithWeighings();
+	public List<DailyLogDTO> findAll() { 
+		List<DailyLog> list = dailyLogRepository.findAllWithWeighings();
+		return list.stream().map(x -> new DailyLogDTO(x)).toList();
 	}
 	
-	public DailyLog findById(Long id) { 
-		return dailyLogRepository.findById(id)
+	public DailyLogDTO findById(Long id) { 
+		DailyLog entity = dailyLogRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Resource not found. Id " + id));
+		return new DailyLogDTO(entity);
 	}
 	
 	@Transactional
-	public DailyLog insert(DailyLog dailyLog) { 	
+	public DailyLogDTO insert(DailyLog dailyLog) { 	
 		dailyLog = dailyLogRepository.save(dailyLog);
 		updateBatchTotalOfDeaths(dailyLog.getBatch());
-		return dailyLog;
+		return new DailyLogDTO(dailyLog);
 	}
 	
 	@Transactional
-	public DailyLog update(Long id, DailyLog dailyLog) { 
+	public DailyLogDTO update(Long id, DailyLog dailyLog) { 
 		DailyLog entity = dailyLogRepository.getReferenceById(id);
 		entity.setAge(dailyLog.getAge());
 		entity.setFeedConsumption(dailyLog.getFeedConsumption());
@@ -47,7 +50,7 @@ public class DailyLogService {
 		entity.setDailyMortality(dailyLog.getDailyMortality());
 		entity = dailyLogRepository.save(entity);
 		updateBatchTotalOfDeaths(entity.getBatch());
-		return entity;
+		return new DailyLogDTO(entity);
 		}
 	
 	@Transactional

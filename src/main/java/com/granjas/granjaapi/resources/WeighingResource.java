@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.granjas.granjaapi.dto.WeighingDTO;
 import com.granjas.granjaapi.entities.Weighing;
 import com.granjas.granjaapi.services.WeighingService;
 
@@ -28,28 +29,28 @@ public class WeighingResource {
 	}
 	
 	@GetMapping
-	public ResponseEntity<List<Weighing>> findAll() { 
-		List<Weighing> list = weighingService.findAll();
+	public ResponseEntity<List<WeighingDTO>> findAll() { 
+		List<WeighingDTO> list = weighingService.findAll();
 		return ResponseEntity.ok().body(list);
 	}
 	
 	@GetMapping(value = "/{id}")
-	public ResponseEntity<Weighing> findById(@PathVariable Long id) { 
-		Weighing weighing = weighingService.findById(id);
+	public ResponseEntity<WeighingDTO> findById(@PathVariable Long id) { 
+		WeighingDTO weighing = weighingService.findById(id);
 		return ResponseEntity.ok().body(weighing);
 	}
 	
 	@PostMapping
-	public ResponseEntity<Weighing> insert(@RequestBody Weighing weighing) { 
-		weighing = weighingService.insert(weighing);
+	public ResponseEntity<WeighingDTO> insert(@RequestBody Weighing weighing) { 
+		WeighingDTO weighingDTO = weighingService.insert(weighing);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
-	            .buildAndExpand(weighing.getId()).toUri();
-		return ResponseEntity.created(uri).body(weighing);
+	            .buildAndExpand(weighingDTO.getId()).toUri();
+		return ResponseEntity.created(uri).body(weighingDTO);
 	}
 	
 	@PutMapping(value = "/{id}")
-	public ResponseEntity<Weighing> update(@PathVariable Long id, @RequestBody Weighing weighing) { 
-		Weighing entity = weighingService.update(id, weighing);
+	public ResponseEntity<WeighingDTO> update(@PathVariable Long id, @RequestBody Weighing weighing) { 
+		WeighingDTO entity = weighingService.update(id, weighing);
 		return ResponseEntity.ok().body(entity);
 	}
 	
