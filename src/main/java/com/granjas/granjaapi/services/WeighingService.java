@@ -35,18 +35,28 @@ public class WeighingService {
 	}
 	
 	@Transactional
-	public WeighingDTO insert(Weighing weighing) { 
-		weighing = weighingRepository.save(weighing);
-		updateDailyLogCalculations(weighing.getDailyLog().getId(), null);
-		return new WeighingDTO(weighing);
+	public WeighingDTO insert(WeighingDTO dto) { 
+		Weighing entity = new Weighing();
+		entity.setWeighingPoint(dto.getWeighingPoint());
+		entity.setTotalInBox(dto.getTotalInBox());
+		entity.setWeightInBox(dto.getWeightInBox());
+		
+		if (dto.getDailyLogId() != null) { 
+			DailyLog dailyLog = new DailyLog(); 
+			dailyLog.setId(dto.getDailyLogId());
+			entity.setDailyLog(dailyLog);
+		}
+		entity = weighingRepository.save(entity);
+		updateDailyLogCalculations(dto.getDailyLogId(), null);
+		return new WeighingDTO(entity);
 	}
 	
 	@Transactional
-	public WeighingDTO update(Long id, Weighing weighing) { 
+	public WeighingDTO update(Long id, WeighingDTO dto) { 
 		Weighing entity = weighingRepository.getReferenceById(id);
-		entity.setWeighingPoint(weighing.getWeighingPoint());
-		entity.setTotalInBox(weighing.getTotalInBox());
-		entity.setWeightInBox(weighing.getWeightInBox());
+		entity.setWeighingPoint(dto.getWeighingPoint());
+		entity.setTotalInBox(dto.getTotalInBox());
+		entity.setWeightInBox(dto.getWeightInBox());
 		weighingRepository.save(entity);
 		updateDailyLogCalculations(entity.getDailyLog().getId(), null);
 		return new WeighingDTO(entity);

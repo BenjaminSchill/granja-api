@@ -41,16 +41,16 @@ public class FarmResource {
 	}
 	
 	@PostMapping
-	public ResponseEntity<FarmDTO> insert(@RequestBody Farm farm) { 
-		FarmDTO farmDTO = farmService.insert(farm);
+	public ResponseEntity<FarmDTO> insert(@RequestBody FarmDTO dto) { 
+		FarmDTO farmDTO = farmService.insert(dto);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
 	            .buildAndExpand(farmDTO.getId()).toUri();
 		return ResponseEntity.created(uri).body(farmDTO);
 	}
 	
 	@PutMapping(value = "/{id}")
-	public ResponseEntity<FarmDTO> update(@PathVariable Long id, @RequestBody Farm farm) { 
-		FarmDTO entity = farmService.update(id, farm);
+	public ResponseEntity<FarmDTO> update(@PathVariable Long id, @RequestBody FarmDTO dto) { 
+		FarmDTO entity = farmService.update(id, dto);
 		return ResponseEntity.ok().body(entity);
 	}
 	

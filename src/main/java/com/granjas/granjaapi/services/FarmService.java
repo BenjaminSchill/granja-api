@@ -33,16 +33,19 @@ public class FarmService {
 		return new FarmDTO(entity);
 	}
 	
-	public FarmDTO insert(Farm farm) { 
-		farm = farmRepository.save(farm);
-		return new FarmDTO(farm);
+	public FarmDTO insert(FarmDTO dto) { 
+		Farm entity = new Farm();
+		entity.setName(dto.getName());
+		entity.setCapacity(dto.getCapacity());
+		entity = farmRepository.save(entity);
+		return new FarmDTO(entity);
 	}
 	
 	@Transactional
-	public FarmDTO update(Long id, Farm farm) { 
+	public FarmDTO update(Long id, FarmDTO dto) { 
 		Farm entity = farmRepository.getReferenceById(id);
-		entity.setName(farm.getName());
-		entity.setCapacity(farm.getCapacity());
+		entity.setName(dto.getName());
+		entity.setCapacity(dto.getCapacity());
 		entity = farmRepository.save(entity);
 		return new FarmDTO(entity);
 	}

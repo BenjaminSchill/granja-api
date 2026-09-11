@@ -41,15 +41,15 @@ public class WeighingResource {
 	}
 	
 	@PostMapping
-	public ResponseEntity<WeighingDTO> insert(@RequestBody Weighing weighing) { 
-		WeighingDTO weighingDTO = weighingService.insert(weighing);
+	public ResponseEntity<WeighingDTO> insert(@RequestBody WeighingDTO dto) { 
+		WeighingDTO weighingDTO = weighingService.insert(dto);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
 	            .buildAndExpand(weighingDTO.getId()).toUri();
 		return ResponseEntity.created(uri).body(weighingDTO);
 	}
 	
 	@PutMapping(value = "/{id}")
-	public ResponseEntity<WeighingDTO> update(@PathVariable Long id, @RequestBody Weighing weighing) { 
+	public ResponseEntity<WeighingDTO> update(@PathVariable Long id, @RequestBody WeighingDTO weighing) { 
 		WeighingDTO entity = weighingService.update(id, weighing);
 		return ResponseEntity.ok().body(entity);
 	}

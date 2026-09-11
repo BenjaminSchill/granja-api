@@ -41,7 +41,7 @@ public class BatchResource {
 	}
 	
 	@PostMapping
-	public ResponseEntity<BatchDTO> insert(@RequestBody Batch batch) { 
+	public ResponseEntity<BatchDTO> insert(@RequestBody BatchDTO batch) { 
 		BatchDTO batchDTO = batchService.insert(batch);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
 				.buildAndExpand(batchDTO.getId()).toUri();
@@ -49,7 +49,7 @@ public class BatchResource {
 	}
 	
 	@PutMapping(value = "/{id}")
-	public ResponseEntity<BatchDTO> update(@PathVariable Long id, @RequestBody Batch batch) { 
+	public ResponseEntity<BatchDTO> update(@PathVariable Long id, @RequestBody BatchDTO batch) { 
 		BatchDTO entity = batchService.update(id, batch);
 		return ResponseEntity.ok().body(entity);
 	}

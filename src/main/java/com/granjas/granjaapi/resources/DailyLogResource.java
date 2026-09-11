@@ -41,16 +41,16 @@ public class DailyLogResource {
 	}
 	
 	@PostMapping
-	public ResponseEntity<DailyLogDTO> insert(@RequestBody DailyLog dailyLog) { 
-		DailyLogDTO dailyLogDTO = dailyLogService.insert(dailyLog);
+	public ResponseEntity<DailyLogDTO> insert(@RequestBody DailyLogDTO dto) { 
+		DailyLogDTO dailyLogDTO = dailyLogService.insert(dto);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
 	            .buildAndExpand(dailyLogDTO.getId()).toUri();
 		return ResponseEntity.created(uri).body(dailyLogDTO);
 	}
 	
 	@PutMapping(value = "/{id}")
-	public ResponseEntity<DailyLogDTO> update(@PathVariable Long id, @RequestBody DailyLog dailyLog) { 
-		DailyLogDTO entity = dailyLogService.update(id, dailyLog);
+	public ResponseEntity<DailyLogDTO> update(@PathVariable Long id, @RequestBody DailyLogDTO dto) { 
+		DailyLogDTO entity = dailyLogService.update(id, dto);
 		return ResponseEntity.ok().body(entity);
 	}
 	

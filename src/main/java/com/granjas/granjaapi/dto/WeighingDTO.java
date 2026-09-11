@@ -11,6 +11,8 @@ public class WeighingDTO implements Serializable{
 	private Integer weighingPoint;
 	private Integer totalInBox;
 	private Double weightInBox;
+	private Long dailyLogId;
+
 	
 	public WeighingDTO() { 
 	}
@@ -20,6 +22,7 @@ public class WeighingDTO implements Serializable{
 		this.weighingPoint = weighing.getWeighingPoint();
 		this.totalInBox = weighing.getTotalInBox();
 		this.weightInBox = weighing.getWeightInBox();
+		this.dailyLogId = (weighing.getDailyLog() != null) ? weighing.getDailyLog().getId() : null;
 	}
 
 	public Long getId() {
@@ -52,5 +55,13 @@ public class WeighingDTO implements Serializable{
 
 	public void setWeightInBox(Double weightInBox) {
 		this.weightInBox = weightInBox;
+	}
+
+	public Long getDailyLogId() {
+		return dailyLogId;
+	}
+
+	public void setDailyLogId(Long dailyLogId) {
+		this.dailyLogId = dailyLogId;
 	}
 }

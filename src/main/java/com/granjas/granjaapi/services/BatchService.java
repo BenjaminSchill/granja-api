@@ -1,11 +1,13 @@
 package com.granjas.granjaapi.services;
 
+import java.time.Instant;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
 import com.granjas.granjaapi.dto.BatchDTO;
 import com.granjas.granjaapi.entities.Batch;
+import com.granjas.granjaapi.entities.Farm;
 import com.granjas.granjaapi.repositories.BatchRepository;
 import com.granjas.granjaapi.services.exceptions.ResourceNotFoundException;
 
@@ -31,16 +33,28 @@ public class BatchService {
 		return new BatchDTO(entity);
 	}
 	
-	public BatchDTO insert(Batch batch) { 
-		batch = batchRepository.save(batch);
-		return new BatchDTO(batch);
+	public BatchDTO insert(BatchDTO dto) { 
+		Batch entity = new Batch(null, Instant.now(), null, null, null, null, null, null);
+		entity.setTotalUponArrival(dto.getTotalUponArrival());
+		entity.setTotalWhenLeft(null);
+		entity.setTotalOfDeaths(null);
+		entity.setStatus(dto.getStatus());
+		
+		if (dto.getFarm() != null) { 
+			Farm farm = new Farm();
+			farm.setId(dto.getFarm().getId());
+			entity.setFarm(farm);
+		}
+		
+		entity = batchRepository.save(entity);
+		return new BatchDTO(entity);
 	}
 	
 	@Transactional
-	public BatchDTO update(Long id, Batch batch) { 
+	public BatchDTO update(Long id, BatchDTO dto) { 
 		Batch entity = batchRepository.getReferenceById(id);
-		entity.setStatus(batch.getStatus());
-		entity.setTotalUponArrival(batch.getTotalUponArrival());
+		entity.setStatus(dto.getStatus());
+		entity.setTotalUponArrival(dto.getTotalUponArrival());
 		entity = batchRepository.save(entity);
 		return new BatchDTO(entity);
 	}

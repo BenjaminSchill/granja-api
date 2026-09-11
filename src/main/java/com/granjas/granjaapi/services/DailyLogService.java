@@ -35,19 +35,34 @@ public class DailyLogService {
 	}
 	
 	@Transactional
-	public DailyLogDTO insert(DailyLog dailyLog) { 	
-		dailyLog = dailyLogRepository.save(dailyLog);
-		updateBatchTotalOfDeaths(dailyLog.getBatch());
-		return new DailyLogDTO(dailyLog);
+	public DailyLogDTO insert(DailyLogDTO dto) { 
+		DailyLog entity = new DailyLog();
+		entity.setAge(dto.getAge());
+		entity.setDailyMortality(dto.getDailyMortality());
+		entity.setTotalWeight(dto.getTotalWeight());
+		entity.setAverageWeight(dto.getAverageWeight());
+		entity.setFeedConsumption(dto.getFeedConsumption());
+		entity.setWaterConsumption(dto.getWaterConsumption());
+		entity.setDate(dto.getDate());
+		
+		if (dto.getBatch() != null) { 
+			Batch batch = new Batch();
+			batch.setId(dto.getBatch().getId());
+			entity.setBatch(batch);
+		}
+		
+		entity = dailyLogRepository.save(entity);
+		updateBatchTotalOfDeaths(entity.getBatch());
+		return new DailyLogDTO(entity);
 	}
 	
 	@Transactional
-	public DailyLogDTO update(Long id, DailyLog dailyLog) { 
+	public DailyLogDTO update(Long id, DailyLogDTO dto) { 
 		DailyLog entity = dailyLogRepository.getReferenceById(id);
-		entity.setAge(dailyLog.getAge());
-		entity.setFeedConsumption(dailyLog.getFeedConsumption());
-		entity.setWaterConsumption(dailyLog.getWaterConsumption());
-		entity.setDailyMortality(dailyLog.getDailyMortality());
+		entity.setAge(dto.getAge());
+		entity.setFeedConsumption(dto.getFeedConsumption());
+		entity.setWaterConsumption(dto.getWaterConsumption());
+		entity.setDailyMortality(dto.getDailyMortality());
 		entity = dailyLogRepository.save(entity);
 		updateBatchTotalOfDeaths(entity.getBatch());
 		return new DailyLogDTO(entity);
