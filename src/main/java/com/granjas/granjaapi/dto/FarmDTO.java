@@ -4,11 +4,18 @@ import java.io.Serializable;
 
 import com.granjas.granjaapi.entities.Farm;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Positive;
+	
 public class FarmDTO implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
 	private Long id;
+	
+	@NotBlank(message = "The name of the farm is mandatory")
 	private String name;
+	
+	@Positive(message = "The capacity must be a number greater than zero")
 	private Integer capacity;
 	
 	public FarmDTO() { 

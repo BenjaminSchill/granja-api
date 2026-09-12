@@ -15,8 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.granjas.granjaapi.dto.WeighingDTO;
-import com.granjas.granjaapi.entities.Weighing;
 import com.granjas.granjaapi.services.WeighingService;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping(value = "/weighings")
@@ -41,7 +42,7 @@ public class WeighingResource {
 	}
 	
 	@PostMapping
-	public ResponseEntity<WeighingDTO> insert(@RequestBody WeighingDTO dto) { 
+	public ResponseEntity<WeighingDTO> insert(@Valid @RequestBody WeighingDTO dto) { 
 		WeighingDTO weighingDTO = weighingService.insert(dto);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
 	            .buildAndExpand(weighingDTO.getId()).toUri();
@@ -49,7 +50,7 @@ public class WeighingResource {
 	}
 	
 	@PutMapping(value = "/{id}")
-	public ResponseEntity<WeighingDTO> update(@PathVariable Long id, @RequestBody WeighingDTO weighing) { 
+	public ResponseEntity<WeighingDTO> update(@PathVariable Long id, @Valid @RequestBody WeighingDTO weighing) { 
 		WeighingDTO entity = weighingService.update(id, weighing);
 		return ResponseEntity.ok().body(entity);
 	}

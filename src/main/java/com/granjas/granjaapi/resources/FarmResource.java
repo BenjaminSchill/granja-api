@@ -15,8 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.granjas.granjaapi.dto.FarmDTO;
-import com.granjas.granjaapi.entities.Farm;
 import com.granjas.granjaapi.services.FarmService;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping(value = "/farms")
@@ -41,7 +42,7 @@ public class FarmResource {
 	}
 	
 	@PostMapping
-	public ResponseEntity<FarmDTO> insert(@RequestBody FarmDTO dto) { 
+	public ResponseEntity<FarmDTO> insert(@Valid @RequestBody FarmDTO dto) { 
 		FarmDTO farmDTO = farmService.insert(dto);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
 	            .buildAndExpand(farmDTO.getId()).toUri();
@@ -49,7 +50,7 @@ public class FarmResource {
 	}
 	
 	@PutMapping(value = "/{id}")
-	public ResponseEntity<FarmDTO> update(@PathVariable Long id, @RequestBody FarmDTO dto) { 
+	public ResponseEntity<FarmDTO> update(@PathVariable Long id, @Valid @RequestBody FarmDTO dto) { 
 		FarmDTO entity = farmService.update(id, dto);
 		return ResponseEntity.ok().body(entity);
 	}

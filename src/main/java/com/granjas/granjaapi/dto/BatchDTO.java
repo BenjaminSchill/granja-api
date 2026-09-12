@@ -6,17 +6,29 @@ import java.time.Instant;
 import com.granjas.granjaapi.entities.Batch;
 import com.granjas.granjaapi.entities.enums.BatchStatus;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+
 public class BatchDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	private Long id;
 	private Instant entryDateTime;
 	private Instant exitDateTime;
+	
+	@NotNull(message = "Total upon arrival is mandatory")
+	@Positive(message = "Total upon arrival must be greater than zero")
 	private Integer totalUponArrival;
+	
 	private Integer totalWhenLeft;
 	private Integer totalOfDeaths;
+	
+	@NotNull(message = "Batch status is mandatory")
 	private BatchStatus status;
 	
+	@NotNull(message = "The farm is mandatory")
+	@Valid
 	private FarmDTO farm;
 	
 	public BatchDTO() { 

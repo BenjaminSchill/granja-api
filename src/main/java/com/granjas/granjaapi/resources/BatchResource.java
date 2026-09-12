@@ -15,8 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.granjas.granjaapi.dto.BatchDTO;
-import com.granjas.granjaapi.entities.Batch;
 import com.granjas.granjaapi.services.BatchService;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping(value = "/batches")
@@ -41,7 +42,7 @@ public class BatchResource {
 	}
 	
 	@PostMapping
-	public ResponseEntity<BatchDTO> insert(@RequestBody BatchDTO batch) { 
+	public ResponseEntity<BatchDTO> insert(@Valid @RequestBody BatchDTO batch) { 
 		BatchDTO batchDTO = batchService.insert(batch);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
 				.buildAndExpand(batchDTO.getId()).toUri();
@@ -49,7 +50,7 @@ public class BatchResource {
 	}
 	
 	@PutMapping(value = "/{id}")
-	public ResponseEntity<BatchDTO> update(@PathVariable Long id, @RequestBody BatchDTO batch) { 
+	public ResponseEntity<BatchDTO> update(@PathVariable Long id, @Valid @RequestBody BatchDTO batch) { 
 		BatchDTO entity = batchService.update(id, batch);
 		return ResponseEntity.ok().body(entity);
 	}

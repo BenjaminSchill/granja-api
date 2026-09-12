@@ -7,18 +7,41 @@ import java.util.List;
 
 import com.granjas.granjaapi.entities.DailyLog;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
+
 public class DailyLogDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
-	private Long id; 
+	private Long id;
+	
+	@NotNull(message = "Age is mandatory")
+	@Positive(message = "Age must be greather than zero")
 	private Integer age; 
+	
+	@PositiveOrZero(message = "Daily mortality must be zero or positive")
 	private Integer dailyMortality;
+	
+	@NotNull(message = "Total weight is mandatory")
+	@Positive(message = "Total weight must be greather than zero")
 	private Double totalWeight;
+	
+	@NotNull(message = "Average weight is mandatory")
+	@Positive(message = "Average weight mus be greater than zero")
 	private Double averageWeight;
+	
+	@Positive(message = "Feed consumption must be greater than zero")
 	private Double feedConsumption;
+	
+	@Positive(message = "Water consumption must be greater than zero")
 	private Double waterConsumption;
+	
 	private Instant date;
 	
+	@NotNull(message = "The batch is mandatory")
+	@Valid
 	private BatchDTO batch;
 	
 	private List<WeighingDTO> weighings = new ArrayList<>();

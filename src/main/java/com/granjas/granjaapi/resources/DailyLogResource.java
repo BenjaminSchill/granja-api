@@ -15,8 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.granjas.granjaapi.dto.DailyLogDTO;
-import com.granjas.granjaapi.entities.DailyLog;
 import com.granjas.granjaapi.services.DailyLogService;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping(value = "/daily-logs")
@@ -41,7 +42,7 @@ public class DailyLogResource {
 	}
 	
 	@PostMapping
-	public ResponseEntity<DailyLogDTO> insert(@RequestBody DailyLogDTO dto) { 
+	public ResponseEntity<DailyLogDTO> insert(@Valid @RequestBody DailyLogDTO dto) { 
 		DailyLogDTO dailyLogDTO = dailyLogService.insert(dto);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
 	            .buildAndExpand(dailyLogDTO.getId()).toUri();
@@ -49,7 +50,7 @@ public class DailyLogResource {
 	}
 	
 	@PutMapping(value = "/{id}")
-	public ResponseEntity<DailyLogDTO> update(@PathVariable Long id, @RequestBody DailyLogDTO dto) { 
+	public ResponseEntity<DailyLogDTO> update(@PathVariable Long id, @Valid @RequestBody DailyLogDTO dto) { 
 		DailyLogDTO entity = dailyLogService.update(id, dto);
 		return ResponseEntity.ok().body(entity);
 	}
