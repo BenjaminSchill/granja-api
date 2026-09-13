@@ -6,7 +6,6 @@ import java.time.Instant;
 import com.granjas.granjaapi.entities.Batch;
 import com.granjas.granjaapi.entities.enums.BatchStatus;
 
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
@@ -28,7 +27,6 @@ public class BatchDTO implements Serializable {
 	private BatchStatus status;
 	
 	@NotNull(message = "The farm is mandatory")
-	@Valid
 	private FarmDTO farm;
 	
 	public BatchDTO() { 

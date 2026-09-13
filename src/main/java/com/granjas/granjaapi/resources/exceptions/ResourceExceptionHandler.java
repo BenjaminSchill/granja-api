@@ -10,6 +10,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import com.granjas.granjaapi.services.exceptions.BusinessRuleException;
 import com.granjas.granjaapi.services.exceptions.DatabaseException;
 import com.granjas.granjaapi.services.exceptions.ResourceNotFoundException;
 
@@ -66,6 +67,19 @@ public class ResourceExceptionHandler implements Serializable{
 		}
 		return ResponseEntity.status(status).body(err);
 	}
-
 	
+	@ExceptionHandler(BusinessRuleException.class) 
+	public ResponseEntity<StandardError> businessRuleError(BusinessRuleException e, HttpServletRequest request) { 
+		String error = "Business rule error";
+		HttpStatus status = HttpStatus.BAD_REQUEST;
+		
+		StandardError err = new StandardError();
+		err.setTimestamp(Instant.now());
+		err.setStatus(status.value());
+		err.setError(error);
+		err.setMessage(e.getMessage());
+		err.setPath(request.getRequestURI());
+		
+		return ResponseEntity.status(status).body(err);
+	}
 }

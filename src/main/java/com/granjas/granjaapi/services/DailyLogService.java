@@ -8,8 +8,10 @@ import org.springframework.transaction.annotation.Transactional;
 import com.granjas.granjaapi.dto.DailyLogDTO;
 import com.granjas.granjaapi.entities.Batch;
 import com.granjas.granjaapi.entities.DailyLog;
+import com.granjas.granjaapi.entities.enums.BatchStatus;
 import com.granjas.granjaapi.repositories.BatchRepository;
 import com.granjas.granjaapi.repositories.DailyLogRepository;
+import com.granjas.granjaapi.services.exceptions.BusinessRuleException;
 import com.granjas.granjaapi.services.exceptions.ResourceNotFoundException;
 
 @Service
@@ -46,9 +48,13 @@ public class DailyLogService {
 		entity.setDate(dto.getDate());
 		
 		if (dto.getBatch() != null) { 
-			Batch batch = new Batch();
-			batch.setId(dto.getBatch().getId());
-			entity.setBatch(batch);
+			Batch batch = batchRepository.findById(dto.getBatch().getId())
+					.orElseThrow(() -> new ResourceNotFoundException("Batch not found. Id " + dto.getBatch().getId()));
+			
+			if (batch.getStatus() == BatchStatus.CLOSED) { 
+				throw new BusinessRuleException("Business Rule Error: Cannot modify data because this batch is CLOSED");
+			}	
+			entity.setBatch(batch);	
 		}
 		
 		entity = dailyLogRepository.save(entity);
@@ -59,6 +65,11 @@ public class DailyLogService {
 	@Transactional
 	public DailyLogDTO update(Long id, DailyLogDTO dto) { 
 		DailyLog entity = dailyLogRepository.getReferenceById(id);
+		
+		if (entity.getBatch().getStatus() == BatchStatus.CLOSED) { 
+			throw new BusinessRuleException("Business Rule Error: Cannot modify data because this batch is CLOSED");
+		}
+		
 		entity.setAge(dto.getAge());
 		entity.setFeedConsumption(dto.getFeedConsumption());
 		entity.setWaterConsumption(dto.getWaterConsumption());
@@ -74,6 +85,10 @@ public class DailyLogService {
 				.orElseThrow(() -> new ResourceNotFoundException("Resource not found. Id " + id));
 		
 		Batch batch = dailyLog.getBatch();
+		
+		if (batch.getStatus() == BatchStatus.CLOSED) { 
+			throw new BusinessRuleException("Business Rule Error: Cannot modify data because this batch is CLOSED");
+		}
 		
 		dailyLogRepository.delete(dailyLog);
 		

@@ -8,7 +8,9 @@ import org.springframework.stereotype.Service;
 import com.granjas.granjaapi.dto.BatchDTO;
 import com.granjas.granjaapi.entities.Batch;
 import com.granjas.granjaapi.entities.Farm;
+import com.granjas.granjaapi.entities.enums.BatchStatus;
 import com.granjas.granjaapi.repositories.BatchRepository;
+import com.granjas.granjaapi.services.exceptions.BusinessRuleException;
 import com.granjas.granjaapi.services.exceptions.ResourceNotFoundException;
 
 import jakarta.transaction.Transactional;
@@ -34,7 +36,7 @@ public class BatchService {
 	}
 	
 	public BatchDTO insert(BatchDTO dto) { 
-		Batch entity = new Batch(null, Instant.now(), null, null, null, null, null, null);
+		Batch entity = new Batch(null, Instant.now(), null, null, null, null, null, null);	
 		entity.setTotalUponArrival(dto.getTotalUponArrival());
 		entity.setTotalWhenLeft(null);
 		entity.setTotalOfDeaths(null);
@@ -53,6 +55,11 @@ public class BatchService {
 	@Transactional
 	public BatchDTO update(Long id, BatchDTO dto) { 
 		Batch entity = batchRepository.getReferenceById(id);
+		
+		if (entity.getStatus() == BatchStatus.CLOSED) { 
+			throw new BusinessRuleException("Business Rule Error: Cannot modify data of a CLOSED batch");
+		}
+		
 		entity.setStatus(dto.getStatus());
 		entity.setTotalUponArrival(dto.getTotalUponArrival());
 		entity = batchRepository.save(entity);
@@ -60,6 +67,12 @@ public class BatchService {
 	}
 	
 	public void delete(Long id) { 
+		Batch entity = batchRepository.getReferenceById(id);
+		
+		if (entity.getStatus() == BatchStatus.CLOSED) { 
+			throw new BusinessRuleException("Business Rule Error: Cannot modify data of a CLOSED batch");
+		}
+		
 		batchRepository.deleteById(id);
 	}
 }

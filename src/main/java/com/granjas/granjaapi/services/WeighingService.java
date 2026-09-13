@@ -8,8 +8,10 @@ import org.springframework.transaction.annotation.Transactional;
 import com.granjas.granjaapi.dto.WeighingDTO;
 import com.granjas.granjaapi.entities.DailyLog;
 import com.granjas.granjaapi.entities.Weighing;
+import com.granjas.granjaapi.entities.enums.BatchStatus;
 import com.granjas.granjaapi.repositories.DailyLogRepository;
 import com.granjas.granjaapi.repositories.WeighingRepository;
+import com.granjas.granjaapi.services.exceptions.BusinessRuleException;
 import com.granjas.granjaapi.services.exceptions.ResourceNotFoundException;
 
 @Service
@@ -42,8 +44,13 @@ public class WeighingService {
 		entity.setWeightInBox(dto.getWeightInBox());
 		
 		if (dto.getDailyLogId() != null) { 
-			DailyLog dailyLog = new DailyLog(); 
-			dailyLog.setId(dto.getDailyLogId());
+			DailyLog dailyLog = dailyLogRepository.findById(dto.getDailyLogId())
+					.orElseThrow(() -> new ResourceNotFoundException("Daily log not found. Id " + dto.getDailyLogId()));
+			
+			if (dailyLog.getBatch().getStatus() == BatchStatus.CLOSED) { 
+				throw new BusinessRuleException("Business Rule Error: Cannot modify data because this batch is CLOSED");
+			}
+			
 			entity.setDailyLog(dailyLog);
 		}
 		entity = weighingRepository.save(entity);
@@ -54,6 +61,11 @@ public class WeighingService {
 	@Transactional
 	public WeighingDTO update(Long id, WeighingDTO dto) { 
 		Weighing entity = weighingRepository.getReferenceById(id);
+		
+		if (entity.getDailyLog().getBatch().getStatus() == BatchStatus.CLOSED) { 
+			throw new BusinessRuleException("Business Rule Error: Cannot modify data because this batch is CLOSED");
+		}
+		
 		entity.setWeighingPoint(dto.getWeighingPoint());
 		entity.setTotalInBox(dto.getTotalInBox());
 		entity.setWeightInBox(dto.getWeightInBox());
@@ -66,6 +78,10 @@ public class WeighingService {
 	public void delete(Long id) { 
 		Weighing weighing = weighingRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Resource not found. Id " + id));
+		
+		if (weighing.getDailyLog().getBatch().getStatus() == BatchStatus.CLOSED) { 
+			throw new BusinessRuleException("Business Rule Error: Cannot modify data because this batch is CLOSED");
+		}
 		
 		Long dailyLogId = weighing.getDailyLog().getId();
 		
