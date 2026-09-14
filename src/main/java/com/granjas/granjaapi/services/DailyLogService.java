@@ -1,6 +1,7 @@
 package com.granjas.granjaapi.services;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -54,7 +55,12 @@ public class DailyLogService {
 			if (batch.getStatus() == BatchStatus.CLOSED) { 
 				throw new BusinessRuleException("Business Rule Error: Cannot modify data because this batch is CLOSED");
 			}	
-			entity.setBatch(batch);	
+			entity.setBatch(batch);
+			
+			Optional<DailyLog> alreadyExists = dailyLogRepository.findByBatchAndDate(batch, dto.getDate());
+			if (alreadyExists.isPresent()) { 
+				throw new BusinessRuleException("Business rule exception: today's daily log already exists");
+			}
 		}
 		
 		entity = dailyLogRepository.save(entity);
@@ -74,11 +80,12 @@ public class DailyLogService {
 		entity.setFeedConsumption(dto.getFeedConsumption());
 		entity.setWaterConsumption(dto.getWaterConsumption());
 		entity.setDailyMortality(dto.getDailyMortality());
+		
 		entity = dailyLogRepository.save(entity);
 		updateBatchTotalOfDeaths(entity.getBatch());
 		return new DailyLogDTO(entity);
-		}
-	
+	}
+
 	@Transactional
 	public void delete(Long id) { 
 		DailyLog dailyLog = dailyLogRepository.findById(id)
