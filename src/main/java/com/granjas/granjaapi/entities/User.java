@@ -2,8 +2,12 @@ package com.granjas.granjaapi.entities;
 
 import java.util.Objects;
 
+import com.granjas.granjaapi.entities.enums.Role;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -23,14 +27,18 @@ public class User {
 	private String email;
 	private String password;
 	
+	@Enumerated(EnumType.STRING)
+	private Role role;
+	
 	public User() { 
 	}
 
-	public User(Long id, String name, String email, String password) {
+	public User(Long id, String name, String email, String password, Role role) {
 		this.id = id;
 		this.name = name;
 		this.email = email;
 		this.password = password;
+		this.role = role;
 	}
 
 	public Long getId() {
@@ -63,6 +71,14 @@ public class User {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public Role getRole() {
+		return role;
+	}
+
+	public void setRole(Role role) {
+		this.role = role;
 	}
 
 	@Override
