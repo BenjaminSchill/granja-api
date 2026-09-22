@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.granjas.granjaapi.config.UserSS;
 
 @Service
@@ -26,5 +27,23 @@ public class TokenService {
 				.sign(Algorithm.HMAC256(secret));
 		
 		return token;
+	}
+	
+	public String validateToken(String token) { 
+		Algorithm algorithm = Algorithm.HMAC256(secret);
+		
+		try { 
+			String username = JWT.require(algorithm)
+					.withIssuer("granja-api")
+					.build()
+					.verify(token)
+					.getSubject();
+			
+		return username;
+		
+		} 
+		catch (JWTVerificationException e) { 
+			return "";
+		}
 	}
 }
