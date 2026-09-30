@@ -34,6 +34,7 @@ public class Batch implements Serializable{
 	private Integer totalUponArrival;
 	private Integer totalWhenLeft;
 	private Integer totalOfDeaths;
+	private Double averageInitialWeight;
 	
 	@Enumerated(EnumType.STRING)
 	private BatchStatus status; 
@@ -45,13 +46,14 @@ public class Batch implements Serializable{
 	public Batch() { 
 	}
 
-	public Batch(Long id, Instant entryDateTime, Instant exitDateTime, Integer totalUponArrival, Integer totalWhenLeft, Integer totalOfDeaths, BatchStatus status, Farm farm) {
+	public Batch(Long id, Instant entryDateTime, Instant exitDateTime, Integer totalUponArrival, Integer totalWhenLeft, Integer totalOfDeaths, Double averageInitialWeight, BatchStatus status, Farm farm) {
 		this.id = id;
 		this.entryDateTime = entryDateTime;
 		this.exitDateTime = exitDateTime;
 		this.totalUponArrival = totalUponArrival;
 		this.totalWhenLeft = totalWhenLeft;
 		this.totalOfDeaths = totalOfDeaths;
+		this.averageInitialWeight = averageInitialWeight;
 		this.status = status;
 		this.farm = farm;
 	}
@@ -86,6 +88,14 @@ public class Batch implements Serializable{
 
 	public void setTotalOfDeaths(Integer totalOfDeaths) {
 		this.totalOfDeaths = totalOfDeaths;
+	}
+
+	public Double getAverageInitialWeight() {
+		return averageInitialWeight;
+	}
+
+	public void setAverageInitialWeight(Double averageInitialWeight) {
+		this.averageInitialWeight = averageInitialWeight;
 	}
 
 	public BatchStatus getStatus() {

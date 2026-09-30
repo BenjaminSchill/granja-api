@@ -22,7 +22,14 @@ public class BatchDTO implements Serializable {
 	
 	private Integer totalWhenLeft;
 	private Integer totalOfDeaths;
-	
+	private Double averageInitialWeight;
+	private Double sampleTotalWeight;
+	private Double samplePercentage;
+	private Integer sampleBirdsCount;
+	private Integer sampleBoxesCount;
+	private Integer birdsPerBox;
+	private Double weightPerEmptyBox;
+
 	@NotNull(message = "Batch status is mandatory")
 	private BatchStatus status;
 	
@@ -39,8 +46,8 @@ public class BatchDTO implements Serializable {
 		this.totalUponArrival = batch.getTotalUponArrival();
 		this.totalWhenLeft = batch.getTotalWhenLeft();
 		this.totalOfDeaths = batch.getTotalOfDeaths();
+		this.averageInitialWeight = batch.getAverageInitialWeight();
 		this.status = batch.getStatus();
-		
 		this.farm = (batch.getFarm() != null) ? new FarmDTO(batch.getFarm()) : null;
 	}
 
@@ -90,6 +97,62 @@ public class BatchDTO implements Serializable {
 
 	public void setTotalOfDeaths(Integer totalOfDeaths) {
 		this.totalOfDeaths = totalOfDeaths;
+	}
+
+	public Double getAverageInitialWeight() {
+		return averageInitialWeight;
+	}
+
+	public void setAverageInitialWeight(Double averageInitialWeight) {
+		this.averageInitialWeight = averageInitialWeight;
+	}
+
+	public Double getSampleTotalWeight() {
+		return sampleTotalWeight;
+	}
+
+	public void setSampleTotalWeight(Double sampleTotalWeight) {
+		this.sampleTotalWeight = sampleTotalWeight;
+	}
+
+	public Double getSamplePercentage() {
+		return samplePercentage;
+	}
+
+	public void setSamplePercentage(Double samplePercentage) {
+		this.samplePercentage = samplePercentage;
+	}
+
+	public Integer getSampleBirdsCount() {
+		return sampleBirdsCount;
+	}
+
+	public void setSampleBirdsCount(Integer sampleBirdsCount) {
+		this.sampleBirdsCount = sampleBirdsCount;
+	}
+
+	public Integer getSampleBoxesCount() {
+		return sampleBoxesCount;
+	}
+
+	public void setSampleBoxesCount(Integer sampleBoxesCount) {
+		this.sampleBoxesCount = sampleBoxesCount;
+	}
+
+	public Integer getBirdsPerBox() {
+		return birdsPerBox;
+	}
+
+	public void setBirdsPerBox(Integer birdsPerBox) {
+		this.birdsPerBox = birdsPerBox;
+	}
+
+	public Double getWeightPerEmptyBox() {
+		return weightPerEmptyBox;
+	}
+
+	public void setWeightPerEmptyBox(Double weightPerEmptyBox) {
+		this.weightPerEmptyBox = weightPerEmptyBox;
 	}
 
 	public BatchStatus getStatus() {
