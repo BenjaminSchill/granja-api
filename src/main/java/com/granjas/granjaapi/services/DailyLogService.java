@@ -63,6 +63,9 @@ public class DailyLogService {
 			}
 		}
 		
+		this.calculateDailyFeedConversion(entity);
+		this.calculateCumulativeFeedConversion(entity);
+		
 		entity = dailyLogRepository.save(entity);
 		updateBatchTotalOfDeaths(entity.getBatch());
 		return new DailyLogDTO(entity);
@@ -81,6 +84,9 @@ public class DailyLogService {
 		entity.setWaterConsumption(dto.getWaterConsumption());
 		entity.setDailyMortality(dto.getDailyMortality());
 		
+		this.calculateDailyFeedConversion(entity);
+		this.calculateCumulativeFeedConversion(entity);
+
 		entity = dailyLogRepository.save(entity);
 		updateBatchTotalOfDeaths(entity.getBatch());
 		return new DailyLogDTO(entity);
@@ -111,5 +117,56 @@ public class DailyLogService {
 		}
 		batch.setTotalOfDeaths(totalOfDeaths);
 		batchRepository.save(batch);
+	}
+	
+	private void calculateDailyFeedConversion(DailyLog dailyLog) { 
+		Optional<DailyLog> entity = dailyLogRepository.findByBatchAndAge(dailyLog.getBatch(), dailyLog.getAge() - 1);
+		
+		if (entity.isEmpty()) { 
+			dailyLog.setDailyFeedConversion(null);
+			return;
+		}
+		
+		if (entity.isPresent()) { 
+			DailyLog yesterday = entity.get();
+			
+			Double todaysConsumption = dailyLog.getFeedConsumption();
+			Double weightGain = dailyLog.getAverageWeight() - yesterday.getAverageWeight();
+			
+			if (weightGain > 0.0) { 
+				Double dailyFeedConversion = todaysConsumption / weightGain ;
+				dailyLog.setDailyFeedConversion(dailyFeedConversion);
+			}
+			else {
+				dailyLog.setDailyFeedConversion(0.0);
+			}
+		}
+	}
+	
+	private void calculateCumulativeFeedConversion(DailyLog dailyLog) { 
+		Double initialWeight = 0.0;
+		if (dailyLog.getBatch().getAverageInitialWeight() != null) { 
+			initialWeight = dailyLog.getBatch().getAverageInitialWeight();
+		}
+		else { 
+			initialWeight = 0.042;
+		}
+		
+		Double totalWeightGain = dailyLog.getAverageWeight() - initialWeight;
+		
+		Double totalConsumption = 0.0;
+		for (DailyLog dl : dailyLogRepository.findByBatch(dailyLog.getBatch())) { 
+			if (dl.getAge() <= dailyLog.getAge()) { 
+				totalConsumption += dl.getFeedConsumption();
+			}
+		}
+		
+		if (totalWeightGain > 0.0) { 
+			Double cumulativeFeedConversion = totalConsumption / totalWeightGain;
+			dailyLog.setCumulativeFeedConversion(cumulativeFeedConversion);
+		}
+		else { 
+			dailyLog.setCumulativeFeedConversion(0.0);
+		}
 	}
 }

@@ -36,6 +36,8 @@ public class DailyLogDTO implements Serializable {
 	private Double waterConsumption;
 	
 	private Instant date;
+	private Double dailyFeedConversion;
+	private Double cumulativeFeedConversion;
 	
 	@NotNull(message = "The batch is mandatory")
 	private BatchDTO batch;
@@ -54,6 +56,8 @@ public class DailyLogDTO implements Serializable {
 		this.feedConsumption = dailyLog.getFeedConsumption();
 		this.waterConsumption = dailyLog.getWaterConsumption();
 		this.date = dailyLog.getDate();
+		this.dailyFeedConversion = dailyLog.getDailyFeedConversion();
+		this.cumulativeFeedConversion = dailyLog.getCumulativeFeedConversion();
 		
 		this.batch = (dailyLog.getBatch() != null) ? new BatchDTO(dailyLog.getBatch()) : null;
 	
@@ -122,6 +126,22 @@ public class DailyLogDTO implements Serializable {
 
 	public void setDate(Instant date) {
 		this.date = date;
+	}
+	
+	public Double getDailyFeedConversion() {
+		return dailyFeedConversion;
+	}
+
+	public void setDailyFeedConversion(Double dailyFeedConversion) {
+		this.dailyFeedConversion = dailyFeedConversion;
+	}
+
+	public Double getCumulativeFeedConversion() {
+		return cumulativeFeedConversion;
+	}
+
+	public void setCumulativeFeedConversion(Double cumulativeFeedConversion) {
+		this.cumulativeFeedConversion = cumulativeFeedConversion;
 	}
 
 	public BatchDTO getBatch() {

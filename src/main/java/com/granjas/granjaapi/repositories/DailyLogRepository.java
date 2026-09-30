@@ -22,4 +22,6 @@ public interface DailyLogRepository extends JpaRepository<DailyLog, Long> {
 	List<DailyLog> findByBatch(com.granjas.granjaapi.entities.Batch batch);
 	
 	Optional<DailyLog> findByBatchAndDate(Batch batch, Instant date);
+	
+	Optional<DailyLog> findByBatchAndAge(Batch batch, Integer age);
 }

@@ -32,6 +32,8 @@ public class DailyLog implements Serializable {
 	private Double feedConsumption;
 	private Double waterConsumption;
 	private Instant date;
+	private Double dailyFeedConversion;
+	private Double cumulativeFeedConversion;
 	
 	@ManyToOne
 	@JoinColumn(name = "batch_id")
@@ -119,6 +121,22 @@ public class DailyLog implements Serializable {
 
 	public void setDate(Instant date) {
 		this.date = date;
+	}
+	
+	public Double getDailyFeedConversion() {
+		return dailyFeedConversion;
+	}
+
+	public void setDailyFeedConversion(Double dailyFeedConversion) {
+		this.dailyFeedConversion = dailyFeedConversion;
+	}
+
+	public Double getCumulativeFeedConversion() {
+		return cumulativeFeedConversion;
+	}
+
+	public void setCumulativeFeedConversion(Double cumulativeFeedConversion) {
+		this.cumulativeFeedConversion = cumulativeFeedConversion;
 	}
 
 	public Batch getBatch() {
