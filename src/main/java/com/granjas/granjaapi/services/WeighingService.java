@@ -19,10 +19,13 @@ public class WeighingService {
 	
 	private final DailyLogRepository dailyLogRepository;
 	private final WeighingRepository weighingRepository;
+	
+	private final DailyLogService dailyLogService;
 
-	public WeighingService(WeighingRepository weighingRepository, DailyLogRepository dailyLogRepository) { 
+	public WeighingService(WeighingRepository weighingRepository, DailyLogRepository dailyLogRepository, DailyLogService dailyLogService) { 
 		this.weighingRepository = weighingRepository;
 		this.dailyLogRepository = dailyLogRepository;
+		this.dailyLogService = dailyLogService;
 	}
 	
 	public List<WeighingDTO> findAll() { 
@@ -55,6 +58,9 @@ public class WeighingService {
 		}
 		entity = weighingRepository.save(entity);
 		updateDailyLogCalculations(dto.getDailyLogId(), null);
+		dailyLogService.calculateDailyFeedConversion(entity.getDailyLog());
+		dailyLogService.calculateCumulativeFeedConversion(entity.getDailyLog());
+		dailyLogRepository.save(entity.getDailyLog());
 		return new WeighingDTO(entity);
 	}
 	
@@ -71,6 +77,9 @@ public class WeighingService {
 		entity.setWeightInBox(dto.getWeightInBox());
 		weighingRepository.save(entity);
 		updateDailyLogCalculations(entity.getDailyLog().getId(), null);
+		dailyLogService.calculateDailyFeedConversion(entity.getDailyLog());
+		dailyLogService.calculateCumulativeFeedConversion(entity.getDailyLog());
+		dailyLogRepository.save(entity.getDailyLog());
 		return new WeighingDTO(entity);
 	}
 	
@@ -88,6 +97,9 @@ public class WeighingService {
 		weighingRepository.delete(weighing);
 		
 		updateDailyLogCalculations(dailyLogId, id);
+		dailyLogService.calculateDailyFeedConversion(weighing.getDailyLog());
+		dailyLogService.calculateCumulativeFeedConversion(weighing.getDailyLog());
+		dailyLogRepository.save(weighing.getDailyLog());
 	}
 		
 	private void updateDailyLogCalculations(Long dailyLogId, Long excludedWeighingId) { 

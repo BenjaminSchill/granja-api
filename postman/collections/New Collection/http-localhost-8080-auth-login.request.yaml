@@ -1,0 +1,23 @@
+$kind: http-request
+name: http://localhost:8080/auth/login
+description: ""
+url: http://localhost:8080/auth/login
+method: POST
+body:
+  type: json
+  content: "{\r
+
+    \  \"email\": \"bina@linda.com\",\r
+
+    \  \"password\": \"123456\"\r
+
+    }\r\n"
+auth:
+  type: noauth
+settings:
+  protocolVersion: auto
+  strictSSL: false
+  followRedirects: true
+  disableCookies: false
+  maxResponseSize: 52428800
+order: 1790884246686

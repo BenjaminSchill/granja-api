@@ -119,7 +119,7 @@ public class DailyLogService {
 		batchRepository.save(batch);
 	}
 	
-	private void calculateDailyFeedConversion(DailyLog dailyLog) { 
+	public void calculateDailyFeedConversion(DailyLog dailyLog) { 
 		Optional<DailyLog> entity = dailyLogRepository.findByBatchAndAge(dailyLog.getBatch(), dailyLog.getAge() - 1);
 		
 		if (entity.isEmpty()) { 
@@ -129,6 +129,10 @@ public class DailyLogService {
 		
 		if (entity.isPresent()) { 
 			DailyLog yesterday = entity.get();
+			
+			if (dailyLog.getAverageWeight() == null || yesterday.getAverageWeight() == null) { 
+				return;
+			}
 			
 			Double todaysConsumption = dailyLog.getFeedConsumption();
 			Double weightGain = dailyLog.getAverageWeight() - yesterday.getAverageWeight();
@@ -143,13 +147,17 @@ public class DailyLogService {
 		}
 	}
 	
-	private void calculateCumulativeFeedConversion(DailyLog dailyLog) { 
+	public void calculateCumulativeFeedConversion(DailyLog dailyLog) { 
 		Double initialWeight = 0.0;
 		if (dailyLog.getBatch().getAverageInitialWeight() != null) { 
 			initialWeight = dailyLog.getBatch().getAverageInitialWeight();
 		}
 		else { 
 			initialWeight = 0.042;
+		}
+		
+		if (dailyLog.getAverageWeight() == null) { 
+			return;
 		}
 		
 		Double totalWeightGain = dailyLog.getAverageWeight() - initialWeight;
