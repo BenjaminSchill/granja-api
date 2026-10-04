@@ -109,12 +109,10 @@ public class WeighingService {
 		double totalWeight = 0.0;
 		int totalChickens = 0; 
 		
-		for (Weighing w : weighingRepository.findAll()) {
-			if (w.getDailyLog() != null && w.getDailyLog().getId().equals(dailyLogId)) {
-				if (excludedWeighingId == null || !w.getId().equals(excludedWeighingId)) {
-					totalWeight += w.getWeightInBox();
-					totalChickens += w.getTotalInBox();
-				}
+		for (Weighing w : weighingRepository.findByDailyLogId(dailyLogId)) {
+			if (excludedWeighingId == null || !w.getId().equals(excludedWeighingId)) {
+				totalWeight += w.getWeightInBox();
+				totalChickens += w.getTotalInBox();
 			}
 		}
 		
