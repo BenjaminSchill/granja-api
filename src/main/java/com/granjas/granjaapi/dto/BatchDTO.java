@@ -3,12 +3,24 @@ package com.granjas.granjaapi.dto;
 import java.io.Serializable;
 import java.time.Instant;
 
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.granjas.granjaapi.entities.Batch;
 import com.granjas.granjaapi.entities.enums.BatchStatus;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
+@JsonPropertyOrder({
+	"id",
+	"entryDateTime",
+	"exitDateTime",
+	"status",
+	"totalUponArrival",
+	"totalWhenLeft",
+	"averageInitialWeight",
+	"totalOfDeaths",
+	"farm"
+})
 public class BatchDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
 	

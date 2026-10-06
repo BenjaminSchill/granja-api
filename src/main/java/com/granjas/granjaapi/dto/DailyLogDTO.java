@@ -5,12 +5,27 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.granjas.granjaapi.entities.DailyLog;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
 
+@JsonPropertyOrder({ 
+    "id", 
+    "age", 
+    "date", 
+    "dailyMortality", 
+    "feedConsumption", 
+    "waterConsumption", 
+    "totalWeight", 
+    "averageWeight", 
+    "dailyFeedConversion", 
+    "cumulativeFeedConversion", 
+    "batch", 
+    "weighings" 
+})
 public class DailyLogDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
