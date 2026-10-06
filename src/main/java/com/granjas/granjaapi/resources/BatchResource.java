@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -58,6 +59,12 @@ public class BatchResource {
 	@DeleteMapping(value = "/{id}")
 	public ResponseEntity<Void> delete(@PathVariable Long id) { 
 		batchService.delete(id);
+		return ResponseEntity.noContent().build();
+	}
+	
+	@PatchMapping(value = "/{id}/close")
+	public ResponseEntity<Void> closeBatch(@PathVariable Long id) { 
+		batchService.closeBatch(id);
 		return ResponseEntity.noContent().build();
 	}
 }

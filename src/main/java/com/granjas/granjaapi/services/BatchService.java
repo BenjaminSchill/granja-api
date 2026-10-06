@@ -126,4 +126,13 @@ public class BatchService {
 		double averageInitialWeight = netWeight / totalHeavyChicks;
 		return averageInitialWeight;
 	}
+	
+	@Transactional
+	public void closeBatch(Long id) {
+		Batch batch = batchRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Batch not found. Id " + id));
+			
+		batch.setStatus(BatchStatus.CLOSED);
+		batchRepository.save(batch);
+	}
 }
