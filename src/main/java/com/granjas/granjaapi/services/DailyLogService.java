@@ -47,6 +47,7 @@ public class DailyLogService {
 		entity.setFeedConsumption(dto.getFeedConsumption());
 		entity.setWaterConsumption(dto.getWaterConsumption());
 		entity.setDate(dto.getDate());
+		entity.setObservations(dto.getObservations());
 		
 		if (dto.getBatch() != null) { 
 			Batch batch = batchRepository.findById(dto.getBatch().getId())
@@ -83,6 +84,7 @@ public class DailyLogService {
 		entity.setFeedConsumption(dto.getFeedConsumption());
 		entity.setWaterConsumption(dto.getWaterConsumption());
 		entity.setDailyMortality(dto.getDailyMortality());
+		entity.setObservations(dto.getObservations());
 		
 		this.calculateDailyFeedConversion(entity);
 		this.calculateCumulativeFeedConversion(entity);

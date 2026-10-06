@@ -34,6 +34,7 @@ public class DailyLog implements Serializable {
 	private Instant date;
 	private Double dailyFeedConversion;
 	private Double cumulativeFeedConversion;
+	private String observations;
 	
 	@ManyToOne
 	@JoinColumn(name = "batch_id")
@@ -47,7 +48,7 @@ public class DailyLog implements Serializable {
 	}
 
 	public DailyLog(Long id, Integer age, Integer dailyMortality, Double totalWeight, Double averageWeight,
-			Double feedConsumption, Double waterConsumption, Instant date, Batch batch) {
+			Double feedConsumption, Double waterConsumption, Instant date, Batch batch, String observations) {
 		this.id = id;
 		this.age = age;
 		this.dailyMortality = dailyMortality;
@@ -57,6 +58,7 @@ public class DailyLog implements Serializable {
 		this.waterConsumption = waterConsumption;
 		this.date = date;
 		this.batch = batch;
+		this.observations = observations;
 	}
 	
 	public Long getId() {
@@ -145,6 +147,14 @@ public class DailyLog implements Serializable {
 
 	public void setBatch(Batch batch) {
 		this.batch = batch;
+	}
+	
+	public String getObservations() {
+		return observations;
+	}
+
+	public void setObservations(String observations) {
+		this.observations = observations;
 	}
 
 	public List<Weighing> getWeighings() {

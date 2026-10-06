@@ -24,7 +24,8 @@ import jakarta.validation.constraints.PositiveOrZero;
     "dailyFeedConversion", 
     "cumulativeFeedConversion", 
     "batch", 
-    "weighings" 
+    "weighings",
+    "observations"
 })
 public class DailyLogDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -53,6 +54,7 @@ public class DailyLogDTO implements Serializable {
 	private Instant date;
 	private Double dailyFeedConversion;
 	private Double cumulativeFeedConversion;
+	private String observations;
 	
 	@NotNull(message = "The batch is mandatory")
 	private BatchDTO batch;
@@ -73,6 +75,7 @@ public class DailyLogDTO implements Serializable {
 		this.date = dailyLog.getDate();
 		this.dailyFeedConversion = dailyLog.getDailyFeedConversion();
 		this.cumulativeFeedConversion = dailyLog.getCumulativeFeedConversion();
+		this.observations = dailyLog.getObservations();
 		
 		this.batch = (dailyLog.getBatch() != null) ? new BatchDTO(dailyLog.getBatch()) : null;
 	
@@ -165,6 +168,14 @@ public class DailyLogDTO implements Serializable {
 
 	public void setBatch(BatchDTO batch) {
 		this.batch = batch;
+	}
+	
+	public String getObservations() {
+		return observations;
+	}
+
+	public void setObservations(String observations) {
+		this.observations = observations;
 	}
 
 	public List<WeighingDTO> getWeighings() {
