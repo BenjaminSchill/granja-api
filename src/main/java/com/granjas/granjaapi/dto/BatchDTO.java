@@ -19,6 +19,8 @@ import jakarta.validation.constraints.Positive;
 	"totalWhenLeft",
 	"averageInitialWeight",
 	"totalOfDeaths",
+	"totalFeedConsumption",
+	"totalWaterConsumption",
 	"farm"
 })
 public class BatchDTO implements Serializable {
@@ -34,6 +36,8 @@ public class BatchDTO implements Serializable {
 	
 	private Integer totalWhenLeft;
 	private Integer totalOfDeaths;
+	private Double totalFeedConsumption;
+	private Double totalWaterConsumption;
 	private Double averageInitialWeight;
 	private Double sampleTotalWeight;
 	private Double samplePercentage;
@@ -58,6 +62,8 @@ public class BatchDTO implements Serializable {
 		this.totalUponArrival = batch.getTotalUponArrival();
 		this.totalWhenLeft = batch.getTotalWhenLeft();
 		this.totalOfDeaths = batch.getTotalOfDeaths();
+		this.totalFeedConsumption = batch.getTotalFeedConsumption();
+		this.totalWaterConsumption = batch.getTotalWaterConsumption();
 		this.averageInitialWeight = batch.getAverageInitialWeight();
 		this.status = batch.getStatus();
 		this.farm = (batch.getFarm() != null) ? new FarmDTO(batch.getFarm()) : null;
@@ -109,6 +115,22 @@ public class BatchDTO implements Serializable {
 
 	public void setTotalOfDeaths(Integer totalOfDeaths) {
 		this.totalOfDeaths = totalOfDeaths;
+	}
+	
+	public Double getTotalFeedConsumption() {
+		return totalFeedConsumption;
+	}
+
+	public void setTotalFeedConsumption(Double totalFeedConsumption) {
+		this.totalFeedConsumption = totalFeedConsumption;
+	}
+
+	public Double getTotalWaterConsumption() {
+		return totalWaterConsumption;
+	}
+
+	public void setTotalWaterConsumption(Double totalWaterConsumption) {
+		this.totalWaterConsumption = totalWaterConsumption;
 	}
 
 	public Double getAverageInitialWeight() {
