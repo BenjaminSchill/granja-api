@@ -2,7 +2,6 @@ package com.granjas.granjaapi.config;
 
 import java.util.Collection;
 
-import org.jspecify.annotations.Nullable;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -12,15 +11,21 @@ public class UserSS implements UserDetails{
 	private Long id;
 	private String email;
 	private String password;
+	private boolean enabled;
+	private boolean deleted;
 	private Collection<? extends GrantedAuthority> authorities;
 	
 	public UserSS() { 
 	}
 	
-	public UserSS(Long id, String email, String password, Collection<? extends GrantedAuthority> authorities) {
+	public UserSS(Long id, String email, String password, boolean enabled, boolean deleted,
+			Collection<? extends GrantedAuthority> authorities) {
+		
 		this.id = id;
 		this.email = email;
 		this.password = password;
+		this.enabled = enabled;
+		this.deleted = deleted;
 		this.authorities = authorities;
 	}
 	
@@ -46,7 +51,7 @@ public class UserSS implements UserDetails{
 
 	@Override
 	public boolean isAccountNonLocked() {
-		return true;
+		return !deleted;
 	}
 
 	@Override
@@ -56,6 +61,6 @@ public class UserSS implements UserDetails{
 
 	@Override
 	public boolean isEnabled() {
-		return true;
+		return enabled;
 	}
 }

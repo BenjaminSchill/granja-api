@@ -30,6 +30,8 @@ public class UserDetailsServiceImpl implements UserDetailsService{
 				user.getId(),
 				user.getEmail(),
 				user.getPassword(),
+				user.isEnabled(),
+				user.isDeleted(),
 				List.of(new SimpleGrantedAuthority("ROLE_" + user.getRole().name())));
 		
 		return userSS;

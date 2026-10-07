@@ -44,6 +44,8 @@ public class SecurityFilter extends OncePerRequestFilter{
 					user.get().getId(),
 					user.get().getEmail(),
 					user.get().getPassword(),
+					user.get().isEnabled(),
+					user.get().isDeleted(),
 					List.of(new SimpleGrantedAuthority("ROLE_" + user.get().getRole().name()))
 					);
 			var auth = new UsernamePasswordAuthenticationToken(userSS, null, userSS.getAuthorities());

@@ -30,15 +30,20 @@ public class User {
 	@Enumerated(EnumType.STRING)
 	private Role role;
 	
+	private boolean enabled;
+	private boolean deleted;
+	
 	public User() { 
 	}
 
-	public User(Long id, String name, String email, String password, Role role) {
+	public User(Long id, String name, String email, String password, Role role, boolean enabled, boolean deleted) {
 		this.id = id;
 		this.name = name;
 		this.email = email;
 		this.password = password;
 		this.role = role;
+		this.enabled = enabled;
+		this.deleted = deleted;
 	}
 
 	public Long getId() {
@@ -79,6 +84,22 @@ public class User {
 
 	public void setRole(Role role) {
 		this.role = role;
+	}
+
+	public boolean isEnabled() {
+		return enabled;
+	}
+
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
+	}
+
+	public boolean isDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
 	}
 
 	@Override
