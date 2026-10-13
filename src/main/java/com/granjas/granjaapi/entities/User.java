@@ -2,6 +2,8 @@ package com.granjas.granjaapi.entities;
 
 import java.util.Objects;
 
+import org.hibernate.annotations.SQLRestriction;
+
 import com.granjas.granjaapi.entities.enums.Role;
 
 import jakarta.persistence.Column;
@@ -15,6 +17,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "tb_user")
+@SQLRestriction("deleted = false")
 public class User {
 	
 	@Id

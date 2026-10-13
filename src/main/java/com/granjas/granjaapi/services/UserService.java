@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import com.granjas.granjaapi.entities.User;
 import com.granjas.granjaapi.repositories.UserRepository;
+import com.granjas.granjaapi.services.exceptions.ResourceNotFoundException;
 
 import jakarta.transaction.Transactional;
 
@@ -46,5 +47,16 @@ public class UserService {
 				 emailBody);
 		
 		return user;
+	}
+	
+	@Transactional
+	public void delete(Long id) { 
+		User user = userRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("User not found. id:" + id));
+		
+		user.setDeleted(true);
+		user.setEnabled(false);
+		
+		userRepository.save(user);
 	}
 }
