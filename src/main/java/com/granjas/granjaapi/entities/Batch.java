@@ -38,6 +38,7 @@ public class Batch implements Serializable{
 	private Double totalFeedConsumption;
 	private Double totalWaterConsumption;
 	private Double averageInitialWeight;
+	private Double feedConversionRatio;
 	
 	@Enumerated(EnumType.STRING)
 	private BatchStatus status; 
@@ -51,7 +52,8 @@ public class Batch implements Serializable{
 
 	public Batch(Long id, Instant entryDateTime, Instant exitDateTime, Integer totalUponArrival,
 			Integer totalWhenLeft, Integer totalOfDeaths, Double averageInitialWeight,
-			Double totalFeedConsumption, Double totalWaterConsumption, BatchStatus status, Farm farm) {
+			Double totalFeedConsumption, Double totalWaterConsumption, BatchStatus status, Farm farm,
+			Double feedConversionRatio) {
 	
 		this.id = id;
 		this.entryDateTime = entryDateTime;
@@ -62,6 +64,7 @@ public class Batch implements Serializable{
 		this.totalFeedConsumption = totalFeedConsumption;
 		this.totalWaterConsumption = totalWaterConsumption;
 		this.averageInitialWeight = averageInitialWeight;
+		this.feedConversionRatio = feedConversionRatio;
 		this.status = status;
 		this.farm = farm;
 	}
@@ -121,6 +124,14 @@ public class Batch implements Serializable{
 	public void setAverageInitialWeight(Double averageInitialWeight) {
 		this.averageInitialWeight = averageInitialWeight;
 	}
+	
+	public Double getFeedConversionRatio() {
+		return feedConversionRatio;
+	}
+
+	public void setFeedConversionRatio(Double feedConversionRatio) {
+		this.feedConversionRatio = feedConversionRatio;
+	}
 
 	public BatchStatus getStatus() {
 		return status;
@@ -168,7 +179,7 @@ public class Batch implements Serializable{
 		this.exitDateTime = Instant.now();
 	}
 	
-	public void compileMetrics(List<DailyLog> logs) { 
+	public void compileMetrics(List<DailyLog> logs, Double averageFinalWeight) { 
 		int totalDeaths = 0;
 		double totalFeed = 0.0;
 		double totalWater = 0.0;
@@ -189,5 +200,12 @@ public class Batch implements Serializable{
 		this.totalFeedConsumption = totalFeed;
 		this.totalWaterConsumption = totalWater;
 		this.totalWhenLeft = (this.totalUponArrival != null) ? (this.totalUponArrival - totalDeaths) : 0;
+	
+		if (averageFinalWeight != null && averageFinalWeight > 0 && this.averageInitialWeight != null) {
+			double totalWeightGain = (this.totalWhenLeft * averageFinalWeight) - (this.totalUponArrival * this.averageInitialWeight);
+			if (totalWeightGain > 0) {
+				this.feedConversionRatio = totalFeed / totalWeightGain;
+			}
+		}
 	}
 }

@@ -40,7 +40,7 @@ public class BatchService {
 	}
 	
 	public BatchDTO insert(BatchDTO dto) { 
-		Batch entity = new Batch(null, Instant.now(), null, null, null, null, null, null, null, null, null);	
+		Batch entity = new Batch(null, Instant.now(), null, null, null, null, null, null, null, null, null, null);	
 		entity.setTotalUponArrival(dto.getTotalUponArrival());
 		entity.setTotalWhenLeft(null);
 		entity.setTotalOfDeaths(null);
@@ -132,13 +132,13 @@ public class BatchService {
 	}
 	
 	@Transactional
-	public void closeBatch(Long id) {
+	public void closeBatch(Long id, Double averageFinalWeight) {
 		Batch batch = batchRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Batch not found. Id " + id));
 		
 		List<DailyLog> logs = dailyLogRepository.findByBatch(batch);
 		
-		batch.compileMetrics(logs);
+		batch.compileMetrics(logs, averageFinalWeight);
 		batch.close();
 		
 		batchRepository.save(batch);
